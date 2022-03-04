@@ -7,6 +7,8 @@ import { ICoinPrice } from "../types/coinPriceTypes";
 import InfoChart from "./InfoChart";
 import PriceChart from "./PriceChart";
 import { CoinLogo, Container, Title } from "./main";
+import { useQuery } from "react-query";
+import { getCoinInfo, getCoinPriceInfo } from "../api";
 
 const Semi_Container = styled.div`
     width: 520px;
@@ -43,6 +45,7 @@ const Tab = styled.div<{ chosen?: boolean }>`
     font-size: 12px;
     p {
         transition: all 1s;
+        font-weight: ${ props => props.chosen ? 'bolder' : 'normal' };
         color: ${ props => props.chosen ? props.theme.accentColor : props.theme.textColor };
     }
 `;
@@ -58,20 +61,10 @@ function Detail() {
     const { id } = useParams();
     const { state } = useLocation() as RouteState;
 
-    const [info, setInfo] = useState<ICoinInfo>();
-    const [priceInfo, setPriceInfo] = useState<ICoinPrice>();
+    const {isLoading: isInfoLoading, data: info} = useQuery<ICoinInfo>(['info', id], () => getCoinInfo(id || ''));
+    const {isLoading: isPriceInfoLoading, data: priceInfo} = useQuery<ICoinPrice>(['priceInfo', id], () => getCoinPriceInfo(id || ''));
 
-    useEffect(function() {
-        axios.get(`https://api.coinpaprika.com/v1/coins/${id}`)
-            .then(res => {
-                setInfo(res.data);
-            });
-
-        axios.get(`https://api.coinpaprika.com/v1/tickers/${id}`)
-            .then(res => {
-                setPriceInfo(res.data);
-            });
-    }, []);
+    const isLoading: boolean = isInfoLoading || isPriceInfoLoading;
 
     const infoMatch = useMatch('/detail/:id/info');
     const priceMatch = useMatch('/detail/:id/price');
@@ -81,39 +74,44 @@ function Detail() {
           <Container>
                 <Semi_Container>
                     <Title>
-                        { state?.name ?? 'loading...' }
+                        { state?.name || info?.name }
                         &ensp;
                         <CoinLogo src={`https://cryptoicon-api.vercel.app/api/icon/${info?.symbol.toLowerCase()}`}/>
                     </Title>
                     <br></br>
-                    <Bar>
-                        <p>RANK: {info?.rank}</p>
-                        <p>SYMBOL: {info?.symbol}</p>
-                        <p>OPEN SOURCE: {info?.open_source ? 'YES' : 'NO'}</p>
-                    </Bar>
-                    <br></br>
-                    <p>{ info?.description }</p>
-                    <br></br>
-                    <Bar>
-                        <p>TOTAL SUPPLY: {priceInfo?.total_supply}</p>
-                        <p>MAX SUPPLY: {priceInfo?.max_supply}</p>
-                    </Bar>
-                    <br></br>
-                    <Tab_Container>
-                        <Tab chosen={ infoMatch !== null }>
-                            <Link to={`/detail/${info?.id}/info`}><p>INFO</p></Link>
-                        </Tab>
-                        <Tab chosen={ priceMatch !== null }>
-                            <Link to={`/detail/${info?.id}/price`}><p>PRICE</p></Link>
-                        </Tab>
-                        <Tab>
-                        <Link to="/"><p>MAIN</p></Link>
-                        </Tab>
-                    </Tab_Container>
-                    <Routes>
-                        <Route path="info" element={<InfoChart />}/>
-                        <Route path="price" element={<PriceChart />}/>
-                    </Routes>
+                    {
+                        isLoading ? <p>NOW ON LOADING</p> :
+                        <>
+                            <Bar>
+                                <p>RANK: {info?.rank}</p>
+                                <p>SYMBOL: {info?.symbol}</p>
+                                <p>OPEN SOURCE: {info?.open_source ? 'YES' : 'NO'}</p>
+                            </Bar>
+                            <br></br>
+                            <p>{ info?.description }</p>
+                            <br></br>
+                            <Bar>
+                                <p>TOTAL SUPPLY: {priceInfo?.total_supply}</p>
+                                <p>MAX SUPPLY: {priceInfo?.max_supply}</p>
+                            </Bar>
+                            <br></br>
+                            <Tab_Container>
+                                <Tab chosen={ infoMatch !== null }>
+                                    <Link to={`/detail/${info?.id}/info`}><p>INFO</p></Link>
+                                </Tab>
+                                <Tab chosen={ priceMatch !== null }>
+                                    <Link to={`/detail/${info?.id}/price`}><p>PRICE</p></Link>
+                                </Tab>
+                                <Tab>
+                                <Link to="/"><p>MAIN</p></Link>
+                                </Tab>
+                            </Tab_Container>
+                            <Routes>
+                                <Route path="info" element={<InfoChart />}/>
+                                <Route path="price" element={<PriceChart />}/>
+                            </Routes>
+                        </>
+                    }
                 </Semi_Container>
           </Container>
         </>

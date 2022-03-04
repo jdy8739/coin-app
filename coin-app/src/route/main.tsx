@@ -1,8 +1,10 @@
 import axios from "axios";
 import exp from "constants";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { getAllCoins } from "../api";
 
 const Container = styled.div`
     padding: 100px;
@@ -58,20 +60,16 @@ function Main() {
 
     const nav = useNavigate();
 
-    const [coins, setCoins] = useState<CoinInterface[]>();
-
-    useEffect(() => {
-        axios.get('https://api.coinpaprika.com/v1/coins')
-            .then(res => setCoins(() => res.data.slice(0, 30)));
-    }, []);
+    const {isLoading, data} = useQuery<CoinInterface[]>('coins-data', getAllCoins);
 
     return (
         <>  
             <Container>
                 <Title>Nomad Coins</Title>
                 <br></br>
-                {
-                    coins?.map((coin, i) => {
+                {   
+                    isLoading ? <p>NOW ON LOADING</p> :
+                    data?.slice(0, 50).map((coin, i) => {
                         return (
                             <Link to={{
                                 pathname: `/detail/${coin.id}`
