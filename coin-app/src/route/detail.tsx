@@ -122,7 +122,7 @@ function Detail() {
                             <br></br>
                             <Routes>
                                 <Route path="info" element={<InfoChart coinId={ info?.id ?? "" }/>}/>
-                                <Route path="price" element={<PriceChart />}/>
+                                <Route path="price" element={<PriceChart coinId={ info?.id ?? "" }/>}/>
                             </Routes>
                         </>
                     }

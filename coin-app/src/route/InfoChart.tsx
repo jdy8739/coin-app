@@ -1,6 +1,8 @@
 import { useQuery } from "react-query";
 import { getPriceFluctuation } from "../api";
 import ApexCharts from "react-apexcharts";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 interface IInfoChart {
     time_open: string
@@ -16,6 +18,8 @@ interface IInfoChart {
 function InfoChart({ coinId }: { coinId: string }) {
 
     const {isLoading, data} = useQuery<IInfoChart[]>("info-chart", () => getPriceFluctuation(coinId));
+
+    const isDark = useRecoilValue(isDarkAtom);
 
     return(
         <>
@@ -50,11 +54,11 @@ function InfoChart({ coinId }: { coinId: string }) {
                         fill: {
                             type: "gradient",
                             gradient: {
-                                gradientToColors: ["red"],
+                                gradientToColors: [isDark ? 'red' : '#3C90EB'],
                                 stops: [0, 100]
                             }
                         },
-                        colors: ["teal"],
+                        colors: [isDark ? 'teal' : '#DF7D46'],
                         tooltip: {
                             y: {
                                 formatter: value => value.toFixed(3)
@@ -75,3 +79,4 @@ function InfoChart({ coinId }: { coinId: string }) {
 }
 
 export default InfoChart;
+export { IInfoChart };

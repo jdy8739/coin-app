@@ -98,4 +98,4 @@ function Main() {
 }
 
 export default Main;
-export { Container, Title, CoinLogo };
+export { Container, Title, CoinLogo, Card };
