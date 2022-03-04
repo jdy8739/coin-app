@@ -38,7 +38,12 @@ function PriceChart({ coinId }: { coinId: string }) {
                         },
                         xaxis: {
                             type: "datetime",
-                            categories: data?.map(item => item.time_close)
+                            categories: data?.map(item => item.time_close),
+                            labels: {
+                                style: {
+                                    colors: isDark ? 'white' : 'black'
+                                }
+                            }
                         },
                         tooltip: {
                             theme: "dark"

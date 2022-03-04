@@ -116,7 +116,7 @@ function Detail() {
                                     <Link to={`/detail/${info?.id}/price`}><p>PRICE</p></Link>
                                 </Tab>
                                 <Tab>
-                                <Link to="/"><p>MAIN</p></Link>
+                                <Link to="/coin-app"><p>MAIN</p></Link>
                                 </Tab>
                             </Tab_Container>
                             <br></br>

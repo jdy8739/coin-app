@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Main, { Card } from './route/main';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Detail from './route/detail';
 import styled, { ThemeProvider } from 'styled-components';
 import GlobalStyle from './globalStyles';
@@ -31,12 +31,12 @@ function App() {
         <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
           <GlobalStyle />
           <ModeToggleBtn onClick={() => setIsDark(!isDark)}>{ isDark ? 'dark mode' : 'light mode' }</ModeToggleBtn>
-          <BrowserRouter>
+          <Router>
             <Routes>
-              <Route path='/detail/:id/*' element={<Detail />}/>
-              <Route path='/' element={<Main />}/>
+              <Route path={'/detail/:id/*'} element={<Detail />}/>
+              <Route path={process.env.PUBLIC_URL + '/'} element={<Main />}/>
             </Routes>
-          </BrowserRouter>
+          </Router>
         </ThemeProvider>
         <ReactQueryDevtools/>
       </QueryClientProvider>
