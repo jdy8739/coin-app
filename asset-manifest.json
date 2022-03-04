@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/https//jdy8739.github.io/coin-app/static/js/main.a6fdca50.js",
-    "index.html": "/https//jdy8739.github.io/coin-app/index.html",
-    "main.a6fdca50.js.map": "/https//jdy8739.github.io/coin-app/static/js/main.a6fdca50.js.map"
+    "main.js": "/coin-app/static/js/main.6a15c2ec.js",
+    "index.html": "/coin-app/index.html",
+    "main.6a15c2ec.js.map": "/coin-app/static/js/main.6a15c2ec.js.map"
   },
   "entrypoints": [
-    "static/js/main.a6fdca50.js"
+    "static/js/main.6a15c2ec.js"
   ]
 }
