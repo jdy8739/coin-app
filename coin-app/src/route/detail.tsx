@@ -9,6 +9,7 @@ import PriceChart from "./PriceChart";
 import { CoinLogo, Container, Title } from "./main";
 import { useQuery } from "react-query";
 import { getCoinInfo, getCoinPriceInfo } from "../api";
+import { Helmet } from 'react-helmet';
 
 const Semi_Container = styled.div`
     width: 520px;
@@ -61,8 +62,17 @@ function Detail() {
     const { id } = useParams();
     const { state } = useLocation() as RouteState;
 
-    const {isLoading: isInfoLoading, data: info} = useQuery<ICoinInfo>(['info', id], () => getCoinInfo(id || ''));
-    const {isLoading: isPriceInfoLoading, data: priceInfo} = useQuery<ICoinPrice>(['priceInfo', id], () => getCoinPriceInfo(id || ''));
+    const {isLoading: isInfoLoading, data: info} = useQuery<ICoinInfo>(
+        ['info', id], 
+        () => getCoinInfo(id || ''), 
+        { refetchInterval: 10000 }
+    );
+
+    const {isLoading: isPriceInfoLoading, data: priceInfo} = useQuery<ICoinPrice>(
+        ['priceInfo', id], 
+        () => getCoinPriceInfo(id || ''),
+        { refetchInterval: 10000 }
+    );
 
     const isLoading: boolean = isInfoLoading || isPriceInfoLoading;
 
@@ -72,6 +82,9 @@ function Detail() {
     return(
         <>
           <Container>
+                <Helmet>
+                    <title>{ id }</title>
+                </Helmet>
                 <Semi_Container>
                     <Title>
                         { state?.name || info?.name }
@@ -85,7 +98,7 @@ function Detail() {
                             <Bar>
                                 <p>RANK: {info?.rank}</p>
                                 <p>SYMBOL: {info?.symbol}</p>
-                                <p>OPEN SOURCE: {info?.open_source ? 'YES' : 'NO'}</p>
+                                <p>OPEN SOURCE: {priceInfo?.quotes.USD.price.toFixed(4)}</p>
                             </Bar>
                             <br></br>
                             <p>{ info?.description }</p>
@@ -106,8 +119,9 @@ function Detail() {
                                 <Link to="/"><p>MAIN</p></Link>
                                 </Tab>
                             </Tab_Container>
+                            <br></br>
                             <Routes>
-                                <Route path="info" element={<InfoChart />}/>
+                                <Route path="info" element={<InfoChart coinId={ info?.id ?? "" }/>}/>
                                 <Route path="price" element={<PriceChart />}/>
                             </Routes>
                         </>

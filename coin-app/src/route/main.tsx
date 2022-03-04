@@ -1,6 +1,7 @@
 import axios from "axios";
 import exp from "constants";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -65,6 +66,9 @@ function Main() {
     return (
         <>  
             <Container>
+                <Helmet>
+                    <title>coins-main</title>
+                </Helmet>
                 <Title>Nomad Coins</Title>
                 <br></br>
                 {   

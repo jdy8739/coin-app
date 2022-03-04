@@ -14,3 +14,10 @@ export const getCoinPriceInfo = (id: string) => {
     return fetch(BASE_URL + `/tickers/${id}`)
         .then(res => res.json());
 };
+
+export const getPriceFluctuation = (id: string) => {
+    const end = Math.round(Date.now() / 1000);
+    const start = end - 60 * 60 * 24 * 7;
+    return fetch(BASE_URL + `/coins/${id}/ohlcv/historical?start=${start}&end=${end}`)
+        .then(res => res.json());
+};
