@@ -16,6 +16,7 @@ const Title = styled.h1`
 const CoinName = styled.p`
     text-align: center;
     transition: all 1s;
+    color: ${ props => props.theme.textColor };
 `;
 
 const Card = styled.div`
@@ -95,4 +96,4 @@ function Main() {
 }
 
 export default Main;
-export { Container, Title };
+export { Container, Title, CoinLogo };
