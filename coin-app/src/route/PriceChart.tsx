@@ -21,7 +21,7 @@ function PriceChart({ coinId }: { coinId: string }) {
                         {
                             data: data?.map(item => 
                                 { return { 
-                                    x: item.time_close, 
+                                    x: item.time_open.slice(5, 10), 
                                     y: [item.close.toFixed(3), item.high.toFixed(3), item.low.toFixed(3), item.open.toFixed(3)] 
                                 } }),
                             name: "price"
@@ -37,8 +37,6 @@ function PriceChart({ coinId }: { coinId: string }) {
                             show: false
                         },
                         xaxis: {
-                            type: "datetime",
-                            categories: data?.map(item => item.time_close),
                             labels: {
                                 style: {
                                     colors: isDark ? 'white' : 'black'

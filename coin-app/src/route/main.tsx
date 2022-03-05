@@ -1,6 +1,6 @@
 import axios from "axios";
 import exp from "constants";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,6 +47,15 @@ const CoinLogo = styled.img`
     height: 30px;
 `;
 
+const ShowBtn = styled(Card)`
+    position: fixed;
+    right: 50px;
+    top: 90px;
+    width: 110px;
+    height: 40px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+`;
+
 interface CoinInterface {
     id: string;
     name: string;
@@ -63,6 +72,12 @@ function Main() {
 
     const {isLoading, data} = useQuery<CoinInterface[]>('coins-data', getAllCoins);
 
+    const [showLimitation, setShowLimitation] = useState(30);
+
+    const showMoreCoins = () => {
+        setShowLimitation(showLimitation => showLimitation += 30);
+    };
+
     return (
         <>  
             <Container>
@@ -70,10 +85,11 @@ function Main() {
                     <title>coins-main</title>
                 </Helmet>
                 <Title>Nomad Coins</Title>
+                <ShowBtn onClick={showMoreCoins}>show more</ShowBtn>
                 <br></br>
                 {   
                     isLoading ? <p>NOW ON LOADING</p> :
-                    data?.slice(0, 50).map((coin, i) => {
+                    data?.slice(0, showLimitation).map((coin, i) => {
                         return (
                             <Link to={{
                                 pathname: `/detail/${coin.id}`

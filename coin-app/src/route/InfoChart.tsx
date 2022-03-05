@@ -19,6 +19,8 @@ function InfoChart({ coinId }: { coinId: string }) {
 
     const {isLoading, data} = useQuery<IInfoChart[]>("info-chart", () => getPriceFluctuation(coinId));
 
+    console.log(data);
+
     const isDark = useRecoilValue(isDarkAtom);
 
     return(
@@ -49,7 +51,7 @@ function InfoChart({ coinId }: { coinId: string }) {
                         },
                         xaxis: {
                             type: "datetime",
-                            categories: data?.map(item => item.time_close),
+                            categories: data?.map(item => item.time_open),
                             labels: {
                                 style: {
                                     colors: isDark ? 'white' : 'black'

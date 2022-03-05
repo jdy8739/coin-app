@@ -15,6 +15,7 @@ const Semi_Container = styled.div`
     width: 520px;
     height: 75px;
     margin: auto;
+    text-align: center;
 `;
 
 const Bar = styled.div`
